@@ -5,6 +5,7 @@
   <title>US Government Greenhouse Gas Emissions</title>
   <style>
     body {background-color:#fff; font:12px sans-serif;}
+    footer {margin-top:2em;}
   </style>
 </head>
 <body>
@@ -16,23 +17,100 @@
       <option value="vehicles" >Vehicles</option>
       <option value="ghg_per_vehicle" >Greenhouse Gas Emissions (GHG) per Vehicle</option>
     </select>
-    <div class="chart-container"></div>
+    <div id="chart-container"></div>
     <footer>
       <a href="http://s2t2.github.io/gsa-hackathon-2015/">view</a> |
       <a href="https://github.com/s2t2/gsa-hackathon-2015">source</a>
     </footer>
   </div>
+
   <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+  <script src="http://code.highcharts.com/highcharts.js"></script>
   <script>
 
     var zz;
-
     d3.csv("data/ghg/emissions_by_agency.csv", function(csv_data){
-
-      console.log(csv_data)
-
       zz = csv_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }); // d3.json
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    $(function () {
+        $('#chart-container').highcharts({
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: '',
+                style: {
+                    display: 'none'
+                }
+            },
+            xAxis: {
+                categories: ['Apples', 'Oranges', 'Pears', 'Grapes', 'Bananas']
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Total fruit consumption'
+                }
+            },
+            legend: {
+                reversed: true
+            },
+            plotOptions: {
+                series: {
+                    stacking: 'normal'
+                }
+            },
+            series: [{
+                name: 'John',
+                data: [5, 3, 4, 7, 2]
+            }, {
+                name: 'Jane',
+                data: [2, 2, 3, 2, 1]
+            }, {
+                name: 'Joe',
+                data: [3, 4, 4, 2, 5]
+            }]
+        });
+    });
+
+
+
+
+
 
   </script>
 </body>
