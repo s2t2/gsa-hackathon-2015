@@ -72,13 +72,15 @@
 
     <button id="chart-updator" type="submit" class="btn btn-default">Refresh Chart</button>
 
-    <div id="chart-container"></div>
+    <div id="chart-container" style="margin-top:2em;"></div>
     <footer>
       <a href="http://s2t2.github.io/gsa-hackathon-2015/">view</a> |
       <a href="https://github.com/s2t2/gsa-hackathon-2015">source</a>
     </footer>
   </div>
   <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+  <script src="http://code.highcharts.com/highcharts.js"></script>
   <script>
 
     var agencySelector = document.getElementById("agency-selector")
@@ -96,37 +98,106 @@
 
     var zz;
 
+
+
+
+
+
     function updateChart(){
       d3.csv("data/ghg/emissions_by_agency.csv", function(rows){
         zz = rows
         console.log(rows)
         console.log(agencySelector.value)
 
-        //////ar agency_names = rows.map(function(r){
-        //////  return r.agyName + ' (' + r.agyAbbrev + ')'
-        //////).sort(function(a, b){
-        //////  return d3.ascending(a,b);
-        //////)
+        var e85_count = parseInt(e85_input.value) || 0;
+        var gas_count = parseInt(gas_input.value) || 0;
+        var deisel_count = parseInt(diesel_input.value) || 0;
+        var biodiesel_count = parseInt(biodiesel_input.value) || 0;
+        var b20_count = parseInt(b20_input.value) || 0;
+        var electric_count = parseInt(electric_input.value) || 0;
 
-        //////onsole.log(agency_names)
 
-        //////gencySelector = d3.select("#agency-selector")
-        //////gencyOption = agencySelector.selectAll(".agency-option")
-        //////    .data(agency_names)
+        var e85_proj = e85_count * 100;
+        var gas_proj = gas_count * 100;
+        var deisel_proj = deisel_count * 100;
+        var biodiesel_proj = biodiesel_count * 100;
+        var b20_proj = b20_count * 100;
+        var electric_proj = electric_count * 100;
 
-        //////gencyOption
-        //////    .enter()
-        //////    .append("option")
-        //////        .attr("class","agency-option")
-        //////        .attr("value",function(d){
-        //////          d
-        //////        })
-        //////        .attr("text",function(d){
-        //////          d
-        //////        })
-        //////        //.attr("selected",function(d){
-        //////        //  true if index == 0
-        //////        //})
+        var chart_series = [{
+            name: 'E85 Vehicles',
+            data: [e85_proj]
+        }, {
+            name: 'Gas Vehicles',
+            data: [gas_proj]
+        }, {
+            name: 'Other Vehicles (Diesel, Biodiesel, B20, Electric)',
+            data: [deisel_proj + biodiesel_proj + b20_proj + electric_proj]
+        }];
+
+
+
+
+        $('#chart-container').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: '',
+                style: {
+                  display: 'none'
+                }
+            },
+            xAxis: {
+                categories: ['Projected Emissions']
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Greenhouse Gas Emissions (kilograms)'
+                },
+                stackLabels: {
+                    enabled: true,
+                    style: {
+                        fontWeight: 'bold',
+                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                    }
+                }
+            },
+            //legend: {
+            //    align: 'middle',
+            //    verticalAlign: 'bottom',
+            //    floating: true,
+            //    backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+            //    borderColor: '#CCC',
+            //    borderWidth: 1,
+            //    shadow: false
+            //,
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.x + '</b><br/>' +
+                        this.series.name + ': ' + this.y + '<br/>' +
+                        'Total: ' + this.point.stackTotal;
+                }
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                    dataLabels: {
+                        enabled: true,
+                        color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+                        style: {
+                            textShadow: '0 0 3px black'
+                        }
+                    }
+                }
+            },
+            series: chart_series
+        }); // highcharts
+
+
+
+
 
       }); // d3.json
 
