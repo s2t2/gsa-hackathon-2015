@@ -13,7 +13,8 @@
     <h1><a href="/">US Government Greenhouse Gas Emissions</a></h1>
     <h2>Emissions by Agency</h2>
     <select id="metric-selector">
-      <option value="ghg" selected="true">Greenhouse Gas Emissions (GHG)</option>
+      <option value="gge" selected="true">Gasoline Gallon Equivalents (gallons)</option>
+      <option value="ghg">Greenhouse Gas Emissions (kilograms)</option>
       <option value="vehicles">Vehicles</option>
       <!--option value="ghg_per_vehicle" >Greenhouse Gas Emissions (GHG) per Vehicle</option-->
     </select>
@@ -45,6 +46,12 @@
 
       var sort_variable, e85_vehicle_variable, gas_vehicle_variable, other_vehicle_variable;
       switch (metric_abbrev) {
+        case "gge":
+          sort_variable = "GGE_TOTAL"
+          e85_vehicle_variable = "GGE_E85"
+          gas_vehicle_variable = "GGE_GAS"
+          other_vehicle_variable = "GGE_OTHER"
+          break;
         case "ghg":
           sort_variable = "GHG_TOTAL"
           e85_vehicle_variable = "GHG_E85"
