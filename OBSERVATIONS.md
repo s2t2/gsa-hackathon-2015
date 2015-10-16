@@ -55,3 +55,29 @@ FROM (
 ) zz
 GROUP BY 1
 ````
+
+<hr>
+
+Aggregations in `emissions_by_agency.csv` are reliable.
+
+```` sql
+SELECT
+  a.agyId AS agency_id
+  ,a.agyAbbrev AS agency_abbrev
+  ,a.agyName AS agency_name
+  -- emissions
+  ,a.gge_e85
+  ,a.gge_gas
+  ,a.gge_other
+  ,a.gge_e85 + a.gge_gas + a.gge_other AS gge_calculated_total
+  ,a.gge_total
+  -- vehicles
+  ,a.vehcnt_e85
+  ,a.vehcnt_gas
+  ,a.vehcnt_other
+  ,a.vehcnt_total
+  ,a.vehcnt_e85 + a.vehcnt_gas + a.vehcnt_other AS vehicle_count_calculated_total
+FROM emissions_by_agency a
+HAVING (gge_calculated_total <> gge_total) OR (vehicle_count_calculated_total <> vehcnt_total)
+-- >> zero rows
+````
