@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>US Government Greenhouse Gas Emissions</title>
+  <style>
+    body {background-color:#fff; font:12px sans-serif;}
+    footer {margin-top:2em;}
+  </style>
+</head>
+<body>
+  <div id="page" class="container">
+    <h1><a href="/">US Government Greenhouse Gas Emissions</a></h1>
+    <h2>Emissions by Agency</h2>
+    <select id="metric-selector">
+      <option value="gge" selected="true">Gasoline Gallon Equivalents (gallons)</option>
+      <option value="ghg">Greenhouse Gas Emissions (kilograms)</option>
+      <option value="vehicles">Vehicles</option>
+      <!--option value="ghg_per_vehicle" >Greenhouse Gas Emissions (GHG) per Vehicle</option-->
+    </select>
+    <div id="chart-container"></div>
+    <footer>
+      <a href="http://s2t2.github.io/gsa-hackathon-2015/">view</a> |
+      <a href="https://github.com/s2t2/gsa-hackathon-2015">source</a>
+    </footer>
+  </div>
+
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+  <script src="http://code.highcharts.com/highcharts.js"></script>
+  <script>
+
+    var metricSelector = document.getElementById("metric-selector")
+    metricSelector.addEventListener("change", updateChart, false);
+
+    var zz;
+    var chart
+    function updateChart(){
+      var metric_abbrev = metricSelector.value
+      var metric_title = metricSelector.options[metricSelector.selectedIndex].innerHTML // 'Greenhouse Gas Emissions (GHG)'
+      console.log(metric_title)
+
+      //
+      // CHOOSE VARIABLES
+      //
+
+      var sort_variable, e85_vehicle_variable, gas_vehicle_variable, other_vehicle_variable;
+      switch (metric_abbrev) {
+        case "gge":
+          sort_variable = "GGE_TOTAL"
+          e85_vehicle_variable = "GGE_E85"
+          gas_vehicle_variable = "GGE_GAS"
+          other_vehicle_variable = "GGE_OTHER"
+          break;
+        case "ghg":
+          sort_variable = "GHG_TOTAL"
+          e85_vehicle_variable = "GHG_E85"
+          gas_vehicle_variable = "GHG_GAS"
+          other_vehicle_variable = "GHG_OTHER"
+          break;
+        case "vehicles":
+          sort_variable = "VEHCNT_TOTAL"
+          e85_vehicle_variable = "VEHCNT_E85"
+          gas_vehicle_variable = "VEHCNT_GAS"
+          other_vehicle_variable = "VEHCNT_OTHER"
+          break;
+        //case "ghg_per_vehicle":
+        //  sort_variable = "GHG_PER_VEH_TOTAL"
+        //  break;
+      };
+
+      d3.csv("data/ghg/emissions_by_agency.csv", function(rows){
+          zz = rows
+
+          //
+          // SORT AND TRANSFORM DATA
+          //
+
+          var sorted_rows = rows.sort(function(a, b){
+            return d3.descending(
+              parseFloat(a[sort_variable]),
+              parseFloat(b[sort_variable])
+            );
+          })
+
+          var chart_categories = sorted_rows.map(function(r){
+            return r.agyName + ' (' + r.agyAbbrev + ')'
+          }); // ['Agency1', 'Agency2', 'Agency3', 'Agency4', 'Agency5']
+
+          var e85_data_series = sorted_rows.map(function(r){
+            return parseInt(r[e85_vehicle_variable])
+          }); // [5,3,4,7,2] // ordered map of e85_vehicle_variable values
+
+          var gas_data_series = sorted_rows.map(function(r){
+            return parseInt(r[gas_vehicle_variable])
+          }); // [2, 2, 3, 2, 1] // ordered map of gas_vehicle_variable values
+
+          var other_data_series = sorted_rows.map(function(r){
+            return parseInt(r[other_vehicle_variable])
+          }); // [3, 4, 4, 2, 5] // ordered map of other_vehicle_variable values
+
+          var chart_series = [
+            {
+              name: 'E85 Vehicles',
+              data: e85_data_series
+            },
+            {
+              name: 'Gas Vehicles',
+              data: gas_data_series
+            },
+            {
+              name: 'Other Vehicles (Diesel, Biodiesel, B20, Electric)',
+              data: other_data_series
+            }
+          ];
+
+          //
+          // PLOT DATA
+          //
+
+          $('#chart-container').highcharts({
+              chart: {
+                  type: 'bar'
+              },
+              title: {
+                  text: '',
+                  style: {
+                      display: 'none'
+                  }
+              },
+              xAxis: {
+                  categories: chart_categories
+              },
+              yAxis: {
+                  min: 0,
+                  title: {
+                      text: metric_title
+                  }
+              },
+              legend: {
+                  reversed: true
+              },
+              plotOptions: {
+                  series: {
+                      stacking: 'normal'
+                  }
+              },
+              series: chart_series
+          }); // highcharts
+
+
+
+
+
+          $('.highcharts-xaxis-labels text').click(function(){
+            console.log($(this).text())
+          });
+
+
+
+
+
+
+
+
+
+
+
+      }); // d3.json
+
+    }; // updateChart
+
+    updateChart()
+
+  </script>
+</body>
+</html>
