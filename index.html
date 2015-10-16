@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>US Government Greenhouse Gas Emissions</title>
+  <style>
+    body {background-color:#fff; font:12px sans-serif;}
+  </style>
+</head>
+<body>
+  <div id="page" class="container">
+    <h1>US Government Greenhouse Gas Emissions</h1>
+    <div class="chart-container"></div>
+    <footer>
+      <a href="#">view</a> |
+      <a href="https://github.com/s2t2/gsa-hackathon-2015">source</a>
+    </footer>
+  </div>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script>
+
+    var zz;
+
+    d3.csv("data/emissions_by_agency.csv", function(csv_data){
+
+      console.log(csv_data)
+
+      zz = csv_data
+    }); // d3.json
+
+  </script>
+</body>
+</html>
