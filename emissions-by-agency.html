@@ -15,7 +15,7 @@
     <select id="metric-selector">
       <option value="ghg" selected="true">Greenhouse Gas Emissions (GHG)</option>
       <option value="vehicles">Vehicles</option>
-      <option value="ghg_per_vehicle" >Greenhouse Gas Emissions (GHG) per Vehicle</option>
+      <!--option value="ghg_per_vehicle" >Greenhouse Gas Emissions (GHG) per Vehicle</option-->
     </select>
     <div id="chart-container"></div>
     <footer>
@@ -39,14 +39,39 @@
       var metric_title = metricSelector.options[metricSelector.selectedIndex].innerHTML
       console.log(metric_title)
 
-      d3.csv("data/ghg/emissions_by_agency.csv", function(csv_data){
-          zz = csv_data
+      var sort_variable
+      switch (metric_abbrev) {
+        case "ghg":
+          sort_variable = "GHG_TOTAL"
+          break;
+        case "vehicles":
+          sort_variable = "VEHCNT_TOTAL"
+          break;
+        //case "ghg_per_vehicle":
+        //  sort_variable = "GHG_PER_VEH_TOTAL"
+        //  break;
+      };
+
+      d3.csv("data/ghg/emissions_by_agency.csv", function(rows){
+          zz = rows
+
+          var sorted_rows = rows.sort(function(a, b){
+            return d3.descending(a[sort_variable], b[sort_variable]);
+          })
 
           //
           // MANIPULATE DATA
           //
 
-          var chart_categories = ['Agency1', 'Agency2', 'Agency3', 'Agency4', 'Agency5']
+          var chart_categories = sorted_rows.map(function(r){
+            return r.agyName + ' (' + r.agyAbbrev + ')'
+          }) // ['Agency1', 'Agency2', 'Agency3', 'Agency4', 'Agency5']
+
+
+
+
+
+
           var horizontal_axis_title = metric_title // 'Greenhouse Gas Emissions (GHG)'
           var chart_series = [
             {
