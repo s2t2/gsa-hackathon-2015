@@ -10,18 +10,25 @@
 <body>
   <div id="page" class="container">
     <h1><a href="/">US Government Greenhouse Gas Emissions</a></h1>
-    <ul>
-      <li>
-        <a href="/emissions-by-agency.html">Emissions by Agency</a>
-      </li>
-      <li>
-        <a href="/emission-decisions.html">Emission Decisions</a>
-      </li>
-    </ul>
+    <h2>Emissions Decisions</h2>
+    <div class="chart-container"></div>
     <footer>
       <a href="http://s2t2.github.io/gsa-hackathon-2015/">view</a> |
       <a href="https://github.com/s2t2/gsa-hackathon-2015">source</a>
     </footer>
   </div>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script>
+
+    var zz;
+
+    d3.csv("data/ghg/emissions_by_agency.csv", function(csv_data){
+
+      console.log(csv_data)
+
+      zz = csv_data
+    }); // d3.json
+
+  </script>
 </body>
 </html>
