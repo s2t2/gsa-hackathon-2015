@@ -2,6 +2,29 @@
 
 This file contains observations and insights into the raw data, which was imported into a relational database for querying.
 
+<hr>
+
+Two agencies are included in `emissions_by_agency_by_vehicle_type.csv`
+ but not in `emissions_by_agency.csv`.
+
+agyAbbrev	| agyType	| agyName
+--- | --- | ---
+ABMC	| Civilian	| American Battle Monuments Commission
+USAID	| Civilian	| US Agency for International Development
+
+```` sql
+SELECT
+  DISTINCT
+    av.agyAbbrev
+    ,av.agyType
+    ,av.agyName
+FROM emissions_by_agency a
+RIGHT JOIN emissions_by_agency_by_vehicle_type av ON av.agyAbbrev = a.agyAbbrev
+WHERE a.agyId IS null
+````
+
+<hr>
+
 Each agency has between 1-4 different types of vehicles. All agencies have gas vehicles.
 
 vehicle_types	| agency_count
