@@ -12,6 +12,55 @@
   <div id="page" class="container">
     <h1><a href="/">US Government Greenhouse Gas Emissions</a></h1>
     <h2>Emission Decisions</h2>
+    <select id="agency-selector">
+      <option value="ARMY"	selected="true">Department of Army</option>
+      <option value="BBG"	  >Broadcasting Board of Governors</option>
+      <option value="CPSC"	>Consumer Product Safety Commission</option>
+      <option value="CSOSA"	>Court Services and Offender Supervision Agency</option>
+      <option value="DA"	  >Defense Agencies</option>
+      <option value="DAF"	  >Department of Air Force</option>
+      <option value="DHS"	  >Department of Homeland Security</option>
+      <option value="DOA"	  >Department of Agriculture</option>
+      <option value="DOC"	  >Department of Commerce</option>
+      <option value="DOE"	  >Department of Energy</option>
+      <option value="DOED"	>Department of Education</option>
+      <option value="DOI"	  >Department of the Interior</option>
+      <option value="DOJ"	  >Department of Justice</option>
+      <option value="DOL"	  >Department of Labor</option>
+      <option value="EEOC"	>Equal Employment Opportunity Commission</option>
+      <option value="EPA"	  >Environmental Protection Agency</option>
+      <option value="FCC"	  >Federal Communications Commission</option>
+      <option value="FHFA"	>Federal Housing Finance Agency</option>
+      <option value="FMC"	  >Federal Maritime Commission</option>
+      <option value="GPO"	  >Government Printing Office</option>
+      <option value="GSA"	  >General Services Administration</option>
+      <option value="HHS"	  >Department of Health and Human Services</option>
+      <option value="HUD"	  >Department of Housing and Urban Development</option>
+      <option value="ITC"	  >US International Trade Commission</option>
+      <option value="LOC"	  >Library of Congress</option>
+      <option value="NARA"	>National Archives & Records Administration</option>
+      <option value="NASA"	>National Aeronautics and Space Administration</option>
+      <option value="NATL"  >GALLERY	National Gallery of Art</option>
+      <option value="NAVY"	>Department of Navy</option>
+      <option value="NLRB"	>National Labor Relations Board</option>
+      <option value="NRC"	  >Nuclear Regulatory Commission</option>
+      <option value="NSF"	  >National Science Foundation</option>
+      <option value="NTSB"	>National Transportation Safety Board</option>
+      <option value="OPM"	  >Office of Personnel Management</option>
+      <option value="PEACE CORPS"	>Peace Corps</option>
+      <option value="PSA"	  >Pretrial Services Agency for the Dist of Columbia</option>
+      <option value="SBA"	  >Small Business Administration</option>
+      <option value="SI"	  >Smithsonian Institution</option>
+      <option value="SSA"	  >Social Security Administration</option>
+      <option value="STATE"	>Department of State</option>
+      <option value="TRANS"	>Department of Transportation</option>
+      <option value="TREAS"	>Department of the Treasury</option>
+      <option value="TVA"	  >Tennessee Valley Authority</option>
+      <option value="USACE"	>Corps of Engineers, Civil Works</option>
+      <option value="USMC"	>United States Marine Corps</option>
+      <option value="USPS"	>U.S. Postal Service</option>
+      <option value="VA"	  >Department of Veterans Affairs</option>
+    </select>
     <div id="chart-container"></div>
     <footer>
       <a href="http://s2t2.github.io/gsa-hackathon-2015/">view</a> |
@@ -21,14 +70,47 @@
   <script src="http://d3js.org/d3.v3.min.js"></script>
   <script>
 
+    var agencySelector = document.getElementById("agency-selector")
+    agencySelector.addEventListener("change", updateChart, false);
     var zz;
 
-    d3.csv("data/ghg/emissions_by_agency.csv", function(csv_data){
+    function updateChart(){
+      d3.csv("data/ghg/emissions_by_agency.csv", function(rows){
+        zz = rows
+        console.log(rows)
+        console.log(agencySelector.value)
 
-      console.log(csv_data)
+        //////ar agency_names = rows.map(function(r){
+        //////  return r.agyName + ' (' + r.agyAbbrev + ')'
+        //////).sort(function(a, b){
+        //////  return d3.ascending(a,b);
+        //////)
 
-      zz = csv_data
-    }); // d3.json
+        //////onsole.log(agency_names)
+
+        //////gencySelector = d3.select("#agency-selector")
+        //////gencyOption = agencySelector.selectAll(".agency-option")
+        //////    .data(agency_names)
+
+        //////gencyOption
+        //////    .enter()
+        //////    .append("option")
+        //////        .attr("class","agency-option")
+        //////        .attr("value",function(d){
+        //////          d
+        //////        })
+        //////        .attr("text",function(d){
+        //////          d
+        //////        })
+        //////        //.attr("selected",function(d){
+        //////        //  true if index == 0
+        //////        //})
+
+      }); // d3.json
+
+    }; // updateChart
+
+    updateChart()
 
   </script>
 </body>
