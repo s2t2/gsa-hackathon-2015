@@ -117,12 +117,19 @@
         var electric_count = parseInt(electric_input.value) || 0;
 
 
-        var e85_proj = e85_count * 100;
-        var gas_proj = gas_count * 100;
-        var deisel_proj = deisel_count * 100;
-        var biodiesel_proj = biodiesel_count * 100;
-        var b20_proj = b20_count * 100;
-        var electric_proj = electric_count * 100;
+        var agency = rows.filter(function(r){ return r.agyAbbrev == agencySelector.value})[0]
+
+
+        var e85_mult = parseFloat(agency["GGE_PER_VEH_E85"]);
+        var gas_mult = parseFloat(agency["GGE_PER_VEH_GAS"]);
+        var other_mult = parseFloat(agency["GGE_PER_VEH_OTHER"]);
+
+        var e85_proj = e85_count * e85_mult;
+        var gas_proj = gas_count * gas_mult;
+        var deisel_proj = deisel_count * other_mult;
+        var biodiesel_proj = biodiesel_count * other_mult;
+        var b20_proj = b20_count * other_mult;
+        var electric_proj = electric_count * other_mult;
 
         var chart_series = [{
             name: 'E85 Vehicles',
