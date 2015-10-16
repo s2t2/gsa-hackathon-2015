@@ -61,6 +61,17 @@
       <option value="USPS"	>U.S. Postal Service</option>
       <option value="VA"	  >Department of Veterans Affairs</option>
     </select>
+
+
+    <input id ="e85_input" type="number" class="form-control" placeholder="# of E85 Vehicles">
+    <input id ="gas_input" type="number" class="form-control" placeholder="# of Gas Vehicles">
+    <input id ="diesel_input" type="number" class="form-control" placeholder="# of Diesel Vehicles">
+    <input id ="biodiesel_input" type="number" class="form-control" placeholder="# of Biodiesel Vehicles">
+    <input id ="b20_input" type="number" class="form-control" placeholder="# of B20 Vehicles">
+    <input id ="electric_input" type="number" class="form-control" placeholder="# of Electric Vehicles">
+
+    <button id="chart-updator" type="submit" class="btn btn-default">Refresh Chart</button>
+
     <div id="chart-container"></div>
     <footer>
       <a href="http://s2t2.github.io/gsa-hackathon-2015/">view</a> |
@@ -71,7 +82,18 @@
   <script>
 
     var agencySelector = document.getElementById("agency-selector")
-    agencySelector.addEventListener("change", updateChart, false);
+    //agencySelector.addEventListener("change", updateChart, false);
+
+    var e85_input = document.getElementById("e85_input");
+    var gas_input = document.getElementById("gas_input");
+    var diesel_input = document.getElementById("diesel_input");
+    var biodiesel_input = document.getElementById("biodiesel_input");
+    var b20_input = document.getElementById("b20_input");
+    var electric_input = document.getElementById("electric_input");
+
+    var chartUpdator = document.getElementById("chart-updator")
+    chartUpdator.addEventListener("click", updateChart, false);
+
     var zz;
 
     function updateChart(){
