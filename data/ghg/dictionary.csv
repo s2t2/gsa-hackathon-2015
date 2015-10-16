@@ -1,0 +1,26 @@
+Field Name,Defintion
+GGE_E85,Total GGE for E85 vehicles
+GGE_GAS,Total GGE for Gas vehicles
+GGE_GASE85,Sum of GGE for E85 and Gas vehicles
+GGE_OTHER,Total GGE for non Gas or E85 vehicles
+GGE_TOTAL,Total GGE for all vehicle fuel types
+GHG_E85,GHG for E85 vehicles
+GHG_GAS,GHG for Gas vehicles
+GHG_GASE85,Sum of GHG for E85 and Gas vehicles
+GHG_OTHER,Total GHG for non Gas or E85 vehicles
+GHG_TOTAL,Total GHG for all vehicle fuel types
+VEHCNT_E85,Total E85 vehicle count
+VEHCNT_GAS,Total Gas vehicle count
+VEHCNT_GASE85,Sum of E85 vehicle count and Gas vehicle count
+VEHCNT_OTHER,Total vehicle count for non Gas or E85 vehicles
+VEHCNT_TOTAL,Total vehicle count for all vehicle fuel types
+GGE_PER_VEH_E85,GGE_E85 / VEHCNT_E85
+GGE_PER_VEH_GAS,GGE_GAS / VEHCNT_GAS
+GGE_PER_VEH_GASE85,GGE_GASE85 / VEHCNT_GASE85
+GGE_PER_VEH_OTHER,GGE_OTHER / VEHCNT_OTHER
+GGE_PER_VEH_TOTAL,GGE_TOTAL / VEHCNT_TOTAL
+GHG_PER_VEH_E85,GHG_E85 / VEHCNT_E85
+GHG_PER_VEH_GAS,GHG_GAS / VEHCNT_GAS
+GHG_PER_VEH_GASE85,GHG_GASE85 / VEHCNT_GASE85
+GHG_PER_VEH_OTHER,GHG_OTHER / VEHCNT_OTHER
+GHG_PER_VEH_TOTAL,GHG_TOTAL / VEHCNT_TOTAL
