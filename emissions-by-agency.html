@@ -14,7 +14,7 @@
     <h2>Emissions by Agency</h2>
     <select id="metric-selector">
       <option value="ghg" selected="true">Greenhouse Gas Emissions (GHG)</option>
-      <option value="vehicles" >Vehicles</option>
+      <option value="vehicles">Vehicles</option>
       <option value="ghg_per_vehicle" >Greenhouse Gas Emissions (GHG) per Vehicle</option>
     </select>
     <div id="chart-container"></div>
@@ -29,88 +29,86 @@
   <script src="http://code.highcharts.com/highcharts.js"></script>
   <script>
 
+    var metricSelector = document.getElementById("metric-selector")
+    metricSelector.addEventListener("change", updateChart, false);
+
     var zz;
-    d3.csv("data/ghg/emissions_by_agency.csv", function(csv_data){
-      zz = csv_data
+    var chart //= new Highcharts.Chart
+    function updateChart(){
+      var metric_abbrev = metricSelector.value
+      var metric_title = metricSelector.options[metricSelector.selectedIndex].innerHTML
+      console.log(metric_title)
 
+      d3.csv("data/ghg/emissions_by_agency.csv", function(csv_data){
+          zz = csv_data
 
+          //
+          // MANIPULATE DATA
+          //
 
-
-
-
-
-
-
-
-
-
-
-
-
-    }); // d3.json
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    $(function () {
-        $('#chart-container').highcharts({
-            chart: {
-                type: 'bar'
+          var chart_categories = ['Agency1', 'Agency2', 'Agency3', 'Agency4', 'Agency5']
+          var horizontal_axis_title = metric_title // 'Greenhouse Gas Emissions (GHG)'
+          var chart_series = [
+            {
+              name: 'E85 Vehicles',
+              data: [
+                5, // agency 1 GHG
+                3, // agency2 GHG
+                4, // agency3 GHG
+                7, // agency4 GHG
+                2 // agency5 GHG
+              ]
             },
-            title: {
-                text: '',
-                style: {
-                    display: 'none'
-                }
+            {
+              name: 'Gas Vehicles',
+              data: [2, 2, 3, 2, 1]
             },
-            xAxis: {
-                categories: ['Apples', 'Oranges', 'Pears', 'Grapes', 'Bananas']
-            },
-            yAxis: {
-                min: 0,
-                title: {
-                    text: 'Total fruit consumption'
-                }
-            },
-            legend: {
-                reversed: true
-            },
-            plotOptions: {
-                series: {
-                    stacking: 'normal'
-                }
-            },
-            series: [{
-                name: 'John',
-                data: [5, 3, 4, 7, 2]
-            }, {
-                name: 'Jane',
-                data: [2, 2, 3, 2, 1]
-            }, {
-                name: 'Joe',
-                data: [3, 4, 4, 2, 5]
-            }]
-        });
-    });
+            {
+              name: 'Other Vehicles (Diesel, Biodiesel, B20, Electric)',
+              data: [3, 4, 4, 2, 5]
+            }
+          ]
+
+          //
+          // PLOT DATA
+          //
+
+          $('#chart-container').highcharts({
+              chart: {
+                  type: 'bar'
+              },
+              title: {
+                  text: '',
+                  style: {
+                      display: 'none'
+                  }
+              },
+              xAxis: {
+                  categories: chart_categories
+              },
+              yAxis: {
+                  min: 0,
+                  title: {
+                      text: horizontal_axis_title
+                  }
+              },
+              legend: {
+                  reversed: true
+              },
+              plotOptions: {
+                  series: {
+                      stacking: 'normal'
+                  }
+              },
+              series: chart_series
+          }); // highcharts
 
 
+      }); // d3.json
 
+    }; // updateChart
 
-
+    updateChart()
 
   </script>
 </body>
