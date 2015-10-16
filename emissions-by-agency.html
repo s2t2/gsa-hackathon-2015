@@ -33,19 +33,29 @@
     metricSelector.addEventListener("change", updateChart, false);
 
     var zz;
-    var chart //= new Highcharts.Chart
+    var chart
     function updateChart(){
       var metric_abbrev = metricSelector.value
-      var metric_title = metricSelector.options[metricSelector.selectedIndex].innerHTML
+      var metric_title = metricSelector.options[metricSelector.selectedIndex].innerHTML // 'Greenhouse Gas Emissions (GHG)'
       console.log(metric_title)
 
-      var sort_variable
+      //
+      // CHOOSE VARIABLES
+      //
+
+      var sort_variable, e85_vehicle_variable, gas_vehicle_variable, other_vehicle_variable;
       switch (metric_abbrev) {
         case "ghg":
           sort_variable = "GHG_TOTAL"
+          e85_vehicle_variable = "GHG_E85"
+          gas_vehicle_variable = "GHG_GAS"
+          other_vehicle_variable = "GHG_OTHER"
           break;
         case "vehicles":
           sort_variable = "VEHCNT_TOTAL"
+          e85_vehicle_variable = "VEHCNT_E85"
+          gas_vehicle_variable = "VEHCNT_GAS"
+          other_vehicle_variable = "VEHCNT_OTHER"
           break;
         //case "ghg_per_vehicle":
         //  sort_variable = "GHG_PER_VEH_TOTAL"
@@ -55,44 +65,52 @@
       d3.csv("data/ghg/emissions_by_agency.csv", function(rows){
           zz = rows
 
-          var sorted_rows = rows.sort(function(a, b){
-            return d3.descending(a[sort_variable], b[sort_variable]);
-          })
+          //
+          // SORT AND TRANSFORM DATA
+          //
 
-          //
-          // MANIPULATE DATA
-          //
+          var sorted_rows = rows.sort(function(a, b){
+            return d3.descending(
+              parseFloat(a[sort_variable]),
+              parseFloat(b[sort_variable])
+            );
+          })
 
           var chart_categories = sorted_rows.map(function(r){
             return r.agyName + ' (' + r.agyAbbrev + ')'
-          }) // ['Agency1', 'Agency2', 'Agency3', 'Agency4', 'Agency5']
+          }); // ['Agency1', 'Agency2', 'Agency3', 'Agency4', 'Agency5']
 
+          var e85_data_series = sorted_rows.map(function(r){
+            return parseInt(r[e85_vehicle_variable])
+          }); // [5,3,4,7,2] // ordered map of e85_vehicle_variable values
 
+          var gas_data_series = sorted_rows.map(function(r){
+            return parseInt(r[gas_vehicle_variable])
+          }); // [2, 2, 3, 2, 1] // ordered map of gas_vehicle_variable values
 
+          var other_data_series = sorted_rows.map(function(r){
+            return parseInt(r[other_vehicle_variable])
+          }); // [3, 4, 4, 2, 5] // ordered map of other_vehicle_variable values
 
-
-
-          var horizontal_axis_title = metric_title // 'Greenhouse Gas Emissions (GHG)'
           var chart_series = [
             {
               name: 'E85 Vehicles',
-              data: [
-                5, // agency 1 GHG
-                3, // agency2 GHG
-                4, // agency3 GHG
-                7, // agency4 GHG
-                2 // agency5 GHG
-              ]
+              data: e85_data_series
             },
             {
               name: 'Gas Vehicles',
-              data: [2, 2, 3, 2, 1]
+              data: gas_data_series
             },
             {
               name: 'Other Vehicles (Diesel, Biodiesel, B20, Electric)',
-              data: [3, 4, 4, 2, 5]
+              data: other_data_series
             }
-          ]
+          ];
+
+
+
+
+
 
           //
           // PLOT DATA
@@ -114,7 +132,7 @@
               yAxis: {
                   min: 0,
                   title: {
-                      text: horizontal_axis_title
+                      text: metric_title
                   }
               },
               legend: {
