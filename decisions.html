@@ -10,7 +10,7 @@
 </head>
 <body>
   <div id="page" class="container">
-    <h1><a href="/gsa-hackathon-2015/">US Government Greenhouse Gas Emissions</a></h1>
+    <h1><a id="home-link" >US Government Greenhouse Gas Emissions</a></h1>
     <h2>Emission Decisions</h2>
     <select id="agency-selector">
       <option value="ARMY"	selected="true">Department of Army</option>
@@ -62,7 +62,6 @@
       <option value="VA"	  >Department of Veterans Affairs</option>
     </select>
 
-
     <input id ="e85_input" type="number" class="form-control" placeholder="# of E85 Vehicles">
     <input id ="gas_input" type="number" class="form-control" placeholder="# of Gas Vehicles">
     <input id ="diesel_input" type="number" class="form-control" placeholder="# of Diesel Vehicles">
@@ -83,6 +82,13 @@
   <script src="http://code.highcharts.com/highcharts.js"></script>
   <script>
 
+    // account for different URL paths between production and development environments
+    var repoName = "gsa-hackathon-2015";
+    var baseUrl = "/";
+    if (window.location.hostname != "localhost") {baseUrl += repoName};
+    document.getElementById("home-link").href = baseUrl;
+
+    // listen for and update chart on selections
     var agencySelector = document.getElementById("agency-selector")
     //agencySelector.addEventListener("change", updateChart, false);
 
@@ -98,16 +104,15 @@
 
     var zz;
 
-
-
-
-
-
     function updateChart(){
-      d3.csv("data/ghg/emissions_by_agency.csv", function(rows){
+      d3.csv("data/emissions_by_agency.csv", function(rows){
         zz = rows
         console.log(rows)
         console.log(agencySelector.value)
+
+        //
+        // DETECT INPUTS AND SELECTIONS
+        //
 
         var e85_count = parseInt(e85_input.value) || 0;
         var gas_count = parseInt(gas_input.value) || 0;
@@ -116,9 +121,13 @@
         var b20_count = parseInt(b20_input.value) || 0;
         var electric_count = parseInt(electric_input.value) || 0;
 
-
         var agency = rows.filter(function(r){ return r.agyAbbrev == agencySelector.value})[0]
 
+        //
+        // CALCULATE PROJECTIONS BASED ON INPUTS AND AGENCY-SPECIFIC MULTIPLIERS
+        // other = (diesel + biodiesel + b20 + electric)
+        // total = (eg5 + gas + other)
+        //
 
         var e85_mult = parseFloat(agency["GGE_PER_VEH_E85"]);
         var gas_mult = parseFloat(agency["GGE_PER_VEH_GAS"]);
@@ -142,8 +151,9 @@
             data: [deisel_proj + biodiesel_proj + b20_proj + electric_proj]
         }];
 
-
-
+        //
+        // REPRESENT PROJECTIONS WITH A CHART
+        //
 
         $('#chart-container').highcharts({
             chart: {
@@ -201,10 +211,6 @@
             },
             series: chart_series
         }); // highcharts
-
-
-
-
 
       }); // d3.json
 
