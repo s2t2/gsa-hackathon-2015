@@ -10,7 +10,7 @@
 </head>
 <body>
   <div id="page" class="container">
-    <h1><a href="/gsa-hackathon-2015/">US Government Greenhouse Gas Emissions</a></h1>
+    <h1><a id="home-link" >US Government Greenhouse Gas Emissions</a></h1>
     <h2>Emissions by Agency</h2>
     <select id="metric-selector">
       <option value="gge" selected="true">Gasoline Gallon Equivalents (gallons)</option>
@@ -25,11 +25,20 @@
     </footer>
   </div>
 
+
+
   <script src="http://d3js.org/d3.v3.min.js"></script>
   <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
   <script src="http://code.highcharts.com/highcharts.js"></script>
   <script>
 
+    // account for different URL paths between production and development environments
+    var repoName = "gsa-hackathon-2015";
+    var baseUrl = "/";
+    if (window.location.hostname != "localhost") {baseUrl += repoName};
+    document.getElementById("home-link").href = baseUrl;
+
+    // listen for and update chart on selections
     var metricSelector = document.getElementById("metric-selector")
     metricSelector.addEventListener("change", updateChart, false);
 
@@ -69,7 +78,7 @@
         //  break;
       };
 
-      d3.csv("data/ghg/emissions_by_agency.csv", function(rows){
+      d3.csv("data/emissions_by_agency.csv", function(rows){
           zz = rows
 
           //

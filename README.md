@@ -1,4 +1,4 @@
-# GSA Digital Innovation Hackathon - Fall 2015
+# US Government Greenhouse Gas Emissions
 
 This repository represents work product for the [GSA Digital Innovation Hackathon 2015](https://github.com/GSA/open.gsa.gov/tree/4a6296d66df4e313ac4901c025c5f5338d271152/Digital-Innovation-Hackathon-Fall2015).
 

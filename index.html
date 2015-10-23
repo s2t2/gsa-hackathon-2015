@@ -21,13 +21,14 @@
     </footer>
     <script type="text/javascript">
       window.onload = function(){
+        // account for different URL paths between production and development environments
         var repoName = "gsa-hackathon-2015";
-        var baseUrl = baseUrl = "/";
+        var baseUrl = "/";
         if (window.location.hostname != "localhost") {baseUrl += repoName};
         document.getElementById("home-link").href = baseUrl;
         document.getElementById("emissions-link").href = baseUrl + "emissions.html";
         document.getElementById("decisions-link").href = baseUrl + "decisions.html";
-      }; // account for different URL paths between production and development environments
+      };
     </script>
   </div>
 </body>
