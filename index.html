@@ -10,26 +10,24 @@
 </head>
 <body>
   <div id="page" class="container">
-    <h1><a href="/gsa-hackathon-2015/">US Government Greenhouse Gas Emissions</a></h1>
+    <h1><a id="home-link" >US Government Greenhouse Gas Emissions</a></h1>
     <ul>
-      <li>
-        <a href="/gsa-hackathon-2015/emissions.html">Emissions by Agency</a>
-      </li>
-      <li>
-        <a href="/gsa-hackathon-2015/decisions.html">Emission Decisions</a>
-      </li>
+      <li><a id="emissions-link">Emissions by Agency</a></li>
+      <li><a id="decisions-link">Emission Decisions</a></li>
     </ul>
     <footer>
       <a href="http://s2t2.github.io/gsa-hackathon-2015/">view</a> |
       <a href="https://github.com/s2t2/gsa-hackathon-2015">source</a>
     </footer>
     <script type="text/javascript">
-      var baseUrl = "/";
-      if (window.location.hostname != "localhost") {
-        baseUrl =  "/gsa-hackathon-2015/"
-      }
-      console.log(baseUrl)
-
+      window.onload = function(){
+        var repoName = "gsa-hackathon-2015";
+        var baseUrl = baseUrl = "/";
+        if (window.location.hostname != "localhost") {baseUrl += repoName};
+        document.getElementById("home-link").href = baseUrl;
+        document.getElementById("emissions-link").href = baseUrl + "emissions.html";
+        document.getElementById("decisions-link").href = baseUrl + "decisions.html";
+      }; // account for different URL paths between production and development environments
     </script>
   </div>
 </body>
